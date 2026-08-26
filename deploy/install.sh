@@ -155,6 +155,15 @@ echo "==> Setting file permissions"
 chown -R "${APP_USER}:${APP_USER}" "$APP_PATH"
 chmod -R 775 "$APP_PATH/storage" "$APP_PATH/bootstrap/cache"
 
+# PHP-FPM's opcache normally auto-invalidates a changed bootstrap/cache/
+# config.php within a couple of seconds (validate_timestamps is on by
+# default), but that's not guaranteed on every environment/config — an
+# explicit reload after any config-cache rebuild is cheap insurance
+# against serving a stale cached config (e.g. a blank APP_KEY, which
+# breaks any route touching the session/cookie encryption middleware
+# with "No application encryption key has been specified").
+systemctl reload "php${PHP_VERSION}-fpm" 2>/dev/null || true
+
 # ── 4. Nginx (HTTP first — certbot upgrades it to HTTPS) ────────────────
 echo "==> Configuring Nginx"
 sed \
