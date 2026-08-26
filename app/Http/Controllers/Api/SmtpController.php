@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use App\Models\Smtp;
+use App\Services\SmtpTransportFactory;
 use Illuminate\Http\Request;
 use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -89,11 +89,7 @@ class SmtpController extends Controller
         ]);
 
         try {
-            $transport = new EsmtpTransport($smtp->host, $smtp->port, $smtp->encryption === 'ssl');
-            $transport->setUsername($smtp->username);
-            $transport->setPassword($smtp->password);
-
-            $mailer = new Mailer($transport);
+            $mailer = new Mailer(SmtpTransportFactory::build($smtp));
 
             $email = (new Email())
                 ->from(new Address($smtp->from_email, $smtp->from_name ?? ''))

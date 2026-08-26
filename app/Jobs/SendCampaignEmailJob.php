@@ -3,11 +3,11 @@
 namespace App\Jobs;
 
 use App\Models\SendJob;
+use App\Services\SmtpTransportFactory;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Queue\Queueable;
 use Illuminate\Support\Facades\Log;
 use Symfony\Component\Mailer\Mailer;
-use Symfony\Component\Mailer\Transport\Smtp\EsmtpTransport;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Mime\Email;
 
@@ -51,17 +51,7 @@ class SendCampaignEmailJob implements ShouldQueue
         $job->update(['status' => 'processing', 'attempts' => $job->attempts + 1]);
 
         try {
-            $transport = new EsmtpTransport($smtp->host, $smtp->port, $smtp->encryption === 'ssl');
-            if ($smtp->encryption === 'tls') {
-                $transport->setStreamOptions(array_merge_recursive(
-                    $transport->getStream()->getStreamOptions() ?? [],
-                    ['ssl' => ['allow_self_signed' => true, 'verify_peer' => false]]
-                ));
-            }
-            $transport->setUsername($smtp->username);
-            $transport->setPassword($smtp->password);
-
-            $mailer = new Mailer($transport);
+            $mailer = new Mailer(SmtpTransportFactory::build($smtp));
 
             $email = (new Email())
                 ->from(new Address($job->campaign->from_email ?: $smtp->from_email, $job->campaign->from_name ?: $smtp->from_name ?? ''))

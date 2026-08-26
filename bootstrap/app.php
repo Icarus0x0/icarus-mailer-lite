@@ -13,7 +13,13 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        //
+        // This is an API-only app with no named "login" route, so the
+        // default Authenticate middleware's redirect-to-login behavior for
+        // non-JSON-expecting requests would throw a RouteNotFoundException
+        // (masking the real 401) for any client that doesn't explicitly
+        // send Accept: application/json. Always respond with a plain 401
+        // instead of attempting a redirect.
+        $middleware->redirectGuestsTo(fn () => null);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         $exceptions->shouldRenderJsonWhen(
