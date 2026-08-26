@@ -52,6 +52,24 @@ In a separate terminal, run a queue worker (campaigns send asynchronously):
 php artisan queue:work
 ```
 
+## Deploying to a fresh Ubuntu VPS
+
+`deploy/install.sh` sets up a complete production instance on a fresh Ubuntu 22.04/24.04 server: PHP, MariaDB (with a freshly generated database password), Nginx, a Supervisor-managed queue worker, a free Let's Encrypt SSL certificate, and your login (with a randomly generated password, printed once at the end).
+
+```bash
+git clone <this-repo-url> icarus-mailer-lite
+cd icarus-mailer-lite
+sudo bash deploy/install.sh mail.yourdomain.com you@yourdomain.com owner@yourdomain.com
+```
+
+- Arg 1: the domain this instance will be served on
+- Arg 2: your email, for Let's Encrypt renewal notices
+- Arg 3: the email you'll log in with
+
+**What it can't do:** point your domain's DNS at the server. No script can do that without your DNS provider's API credentials. The installer detects the server's public IP, tells you the exact A record to add, and waits for it to propagate before requesting the SSL certificate — so just add that one record when prompted.
+
+This script is meant to be run once, against a fresh server. To add a second login afterward, run `php artisan app:create-admin you@example.com` directly on the server instead of re-running the installer.
+
 ## API quick start
 
 ```bash

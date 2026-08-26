@@ -1,0 +1,13 @@
+[program:icarus-lite-worker]
+process_name=%(program_name)s_%(process_num)02d
+command=php __APP_PATH__/artisan queue:work --sleep=3 --tries=3 --max-time=3600
+directory=__APP_PATH__
+autostart=true
+autorestart=true
+stopasgroup=true
+killasgroup=true
+user=__APP_USER__
+numprocs=2
+redirect_stderr=true
+stdout_logfile=__APP_PATH__/storage/logs/worker.log
+stopwaitsecs=3600
