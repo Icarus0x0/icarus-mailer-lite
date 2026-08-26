@@ -54,12 +54,23 @@ PHP_VERSION="8.3"
 
 set_env_var() {
     local key="$1" value="$2" file="${3:-$APP_PATH/.env}"
-    local escaped
-    escaped=$(printf '%s\n' "$value" | sed -e 's/[\/&]/\\&/g')
+
+    # Always double-quote the value — Laravel's dotenv parser treats
+    # unquoted whitespace as a syntax error (APP_NAME=Icarus Mailer Lite
+    # fails to parse; APP_NAME="Icarus Mailer Lite" is required). Escape
+    # backslashes and double quotes so the value round-trips correctly.
+    local dotenv_value="${value//\\/\\\\}"
+    dotenv_value="${dotenv_value//\"/\\\"}"
+    local line="${key}=\"${dotenv_value}\""
+
+    # Escape for use as a sed replacement with | as the delimiter.
+    local sed_escaped
+    sed_escaped=$(printf '%s' "$line" | sed -e 's/[\/&|]/\\&/g')
+
     if grep -q "^${key}=" "$file" 2>/dev/null; then
-        sed -i "s|^${key}=.*|${key}=${escaped}|" "$file"
+        sed -i "s|^${key}=.*|${sed_escaped}|" "$file"
     else
-        echo "${key}=${value}" >>"$file"
+        printf '%s\n' "$line" >>"$file"
     fi
 }
 
@@ -88,6 +99,13 @@ echo "==> Creating database and user"
 systemctl enable --now mariadb >/dev/null 2>&1 || service mariadb start
 mysql -e "CREATE DATABASE IF NOT EXISTS \`${DB_NAME}\` CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
 mysql -e "CREATE USER IF NOT EXISTS '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
+# CREATE USER IF NOT EXISTS is a full no-op — including the password —
+# when the user already exists (e.g. re-running this script after an
+# earlier attempt failed partway through). A fresh random DB_PASSWORD is
+# generated every run, so without this the .env written below would end
+# up with a password MySQL never actually set, and every DB query fails
+# with "Access denied". Force-sync the password unconditionally instead.
+mysql -e "ALTER USER '${DB_USER}'@'localhost' IDENTIFIED BY '${DB_PASSWORD}';"
 mysql -e "GRANT ALL PRIVILEGES ON \`${DB_NAME}\`.* TO '${DB_USER}'@'localhost';"
 mysql -e "FLUSH PRIVILEGES;"
 
@@ -160,7 +178,10 @@ supervisorctl update >/dev/null
 supervisorctl start icarus-lite-worker:* >/dev/null 2>&1 || true
 
 # ── 6. DNS check, then SSL ────────────────────────────────────────────────
-PUBLIC_IP="$(curl -s https://ifconfig.me || curl -s https://api.ipify.org || echo "UNKNOWN")"
+# -4 forces IPv4 — on a dual-stack VPS, curl can otherwise return an IPv6
+# address here, which will never match the IPv4 A record this script asks
+# for, causing SSL setup to be skipped even when DNS is actually correct.
+PUBLIC_IP="$(curl -4 -s https://ifconfig.me || curl -4 -s https://api.ipify.org || echo "UNKNOWN")"
 
 echo
 echo "==> DNS setup required"
