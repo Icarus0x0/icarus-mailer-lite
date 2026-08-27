@@ -75,6 +75,8 @@ For frontend development with hot reload instead of a static build, run `npm run
 
 `deploy/install.sh` sets up a complete production instance on a fresh Ubuntu 22.04/24.04 server in one run: PHP 8.3, MariaDB (with a freshly generated database password), Node.js (to build the dashboard), Composer, Nginx, a Supervisor-managed queue worker, a free Let's Encrypt SSL certificate, and your login (with a randomly generated password, printed once at the end).
 
+![Icarus Mailer Lite installer](deploy/assets/install-screenshot.png)
+
 ### Step by step
 
 1. **Point a domain at nothing yet — you'll add the DNS record mid-install.** You just need the domain name decided (e.g. `mail.yourdomain.com`).
