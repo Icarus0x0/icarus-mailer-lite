@@ -35,15 +35,60 @@ export default function Dashboard() {
     completed: 'bg-green-100 text-green-700',
   };
 
-  const proFeatures = [
-    'Adaptive SMTP selection (health scoring, reputation gating, hourly rate-limit-aware rotation)',
-    'Proxy-based sending-location masking',
-    'Automatic DKIM signing per sending domain',
-    'Deliverability testing: seed-account inbox placement checks, auto-pause/resume on spam-folder detection',
-    'Bulk email validation and catch-all/MX-based domain intelligence',
-    'Multi-provider sender-domain automation (Mailgun, SendGrid, Brevo, Mailjet, and more)',
-    'A full email sorter/segmentation pipeline and mailbox automation',
-    'A Telegram bot for remote campaign control',
+  const proFeatureGroups: { category: string; icon: string; items: string[] }[] = [
+    {
+      category: 'Deliverability',
+      icon: 'ri-shield-check-fill',
+      items: [
+        'Adaptive SMTP rotation — live health scoring, reputation gating, and rate-limit-aware selection instead of blind round-robin',
+        'Automatic DKIM signing per sending domain',
+        'Seed-account inbox placement testing with auto-pause on spam-folder detection',
+        'Bounce processing, suppression lists, and DMARC alignment checks',
+        'One-click DNS automation — SPF/DKIM/DMARC records pushed and verified across your ESPs',
+        'Malicious/blacklisted link scanning and vetted redirect domains to protect sender reputation',
+        'Bulk email validation with catch-all and MX-based domain intelligence',
+      ],
+    },
+    {
+      category: 'AI & Automation',
+      icon: 'ri-magic-fill',
+      items: [
+        'AI deliverability classifier that scores templates before you send',
+        'AI template rewriting to fix content that scores poorly',
+        'Self-running deliverability feedback loop that tests and adjusts sending behavior automatically',
+        'Rule-based mailbox automation and a full email sorter/segmentation pipeline',
+        'Scheduled campaign launching with automatic stuck-job recovery',
+      ],
+    },
+    {
+      category: 'Analytics & Reporting',
+      icon: 'ri-bar-chart-box-fill',
+      items: [
+        'Open/click tracking with a real deliverability dashboard',
+        'Recipient engagement and lead scoring',
+        'Live queue-health monitoring',
+      ],
+    },
+    {
+      category: 'Infrastructure & Integrations',
+      icon: 'ri-plug-fill',
+      items: [
+        'Proxy-based sending-location masking',
+        'Multi-provider sender automation (Mailgun, SendGrid, Brevo, Mailjet, and more)',
+        'IMAP mailbox monitoring and OAuth for Gmail/Microsoft inboxes',
+        'Dropbox, Google Drive, OneDrive & SharePoint import/export',
+        'OpenAI-powered content generation baked into the workflow',
+        'A Telegram bot for remote campaign control from your phone',
+      ],
+    },
+    {
+      category: 'Team & Scale',
+      icon: 'ri-team-fill',
+      items: [
+        'Multi-user accounts with an admin approval workflow',
+        'Per-user throttle controls and dedicated sending-domain pools',
+      ],
+    },
   ];
 
   return (
@@ -103,32 +148,44 @@ export default function Dashboard() {
         </div>
       </div>
 
-      <div className="bg-white rounded-lg border-2 border-primary-200 overflow-hidden">
-        <div className="px-6 py-4 border-b-2 border-dark-200 bg-primary-50/30">
-          <h2 className="font-bold font-mono text-dark-900 flex items-center">
+      <div className="bg-white rounded-lg border-2 border-primary-300 overflow-hidden">
+        <div className="px-6 py-5 border-b-2 border-dark-200 bg-primary-50/40">
+          <h2 className="font-bold font-mono text-dark-900 text-lg flex items-center">
             <i className="ri-rocket-2-fill text-primary-500 mr-2"></i>
-            Unlock More With Icarus Mailer Advanced
+            Lite gets your emails out the door. Advanced gets them into the inbox.
           </h2>
-          <p className="text-dark-600 text-xs font-mono mt-1">
-            This Lite dashboard covers the essentials. The Advanced edition adds:
+          <p className="text-dark-600 text-xs font-mono mt-1.5 max-w-3xl">
+            Round-robin SMTP rotation is a coin flip on deliverability at scale. Icarus Mailer Advanced replaces it
+            with live reputation scoring, AI-driven content and DNS automation, and full analytics — the same
+            infrastructure serious senders rely on to actually land in the inbox, not the spam folder.
           </p>
         </div>
-        <div className="px-6 py-5">
-          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
-            {proFeatures.map((f) => (
-              <li key={f} className="flex items-start text-sm font-mono text-dark-700">
-                <i className="ri-lock-2-fill text-primary-500 mr-2 mt-0.5 shrink-0"></i>
-                <span>{f}</span>
-              </li>
-            ))}
-          </ul>
+        <div className="px-6 py-5 grid md:grid-cols-2 gap-x-8 gap-y-6">
+          {proFeatureGroups.map((group) => (
+            <div key={group.category}>
+              <div className="flex items-center text-primary-600 font-mono font-bold text-xs uppercase tracking-wider mb-2.5">
+                <i className={`${group.icon} mr-1.5`}></i>
+                {group.category}
+              </div>
+              <ul className="space-y-1.5">
+                {group.items.map((f) => (
+                  <li key={f} className="flex items-start text-sm font-mono text-dark-700">
+                    <i className="ri-lock-2-fill text-dark-400 mr-2 mt-0.5 shrink-0 text-xs"></i>
+                    <span>{f}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <div className="px-6 pb-6 pt-2">
           <a
             href="https://icarus0x0.com/"
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-5 inline-flex items-center space-x-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 hover:shadow-glow-red transition-all font-mono font-bold text-sm"
+            className="inline-flex items-center space-x-2 px-6 py-3 bg-primary-500 text-white rounded-lg hover:bg-primary-600 hover:shadow-glow-red transition-all font-mono font-bold text-sm"
           >
-            <span>GET ICARUS MAILER ADVANCED</span>
+            <span>UPGRADE TO ICARUS MAILER ADVANCED</span>
             <i className="ri-external-link-line"></i>
           </a>
         </div>
