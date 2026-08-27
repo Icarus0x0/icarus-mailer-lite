@@ -143,9 +143,11 @@ export default function Dashboard() {
             Lite gets your emails out the door. Advanced gets them into the inbox.
           </h2>
           <p className="text-dark-600 text-xs font-mono mt-1.5 max-w-3xl">
-            Round-robin SMTP rotation is a coin flip on deliverability at scale. Icarus Mailer Advanced replaces it
-            with a sophisticated AI deliverability engine, live reputation scoring, and full analytics: the same
-            infrastructure serious senders rely on to actually land in the inbox, not the spam folder.
+            Round-robin rotation is a coin flip once you're sending real volume. Advanced is a different category of
+            tool: a sophisticated AI deliverability engine that scores, predicts, and rewrites every campaign before
+            it sends, reputation-aware SMTP rotation that routes around bad accounts automatically, live
+            inbox-placement testing, and full analytics, not guesswork. Built for people whose inbox placement is
+            revenue, not a side project.
           </p>
         </div>
         <div className="px-6 py-5 grid md:grid-cols-2 gap-x-8 gap-y-6">
