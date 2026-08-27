@@ -73,21 +73,81 @@ For frontend development with hot reload instead of a static build, run `npm run
 
 ## Deploying to a fresh Ubuntu VPS
 
-`deploy/install.sh` sets up a complete production instance on a fresh Ubuntu 22.04/24.04 server: PHP, MariaDB (with a freshly generated database password), Nginx, a Supervisor-managed queue worker, a free Let's Encrypt SSL certificate, and your login (with a randomly generated password, printed once at the end).
+`deploy/install.sh` sets up a complete production instance on a fresh Ubuntu 22.04/24.04 server in one run: PHP 8.3, MariaDB (with a freshly generated database password), Node.js (to build the dashboard), Composer, Nginx, a Supervisor-managed queue worker, a free Let's Encrypt SSL certificate, and your login (with a randomly generated password, printed once at the end).
 
-```bash
-git clone <this-repo-url> icarus-mailer-lite
-cd icarus-mailer-lite
-sudo bash deploy/install.sh mail.yourdomain.com you@yourdomain.com owner@yourdomain.com
-```
+### Step by step
 
-- Arg 1: the domain this instance will be served on
-- Arg 2: your email, for Let's Encrypt renewal notices
-- Arg 3: the email you'll log in with
+1. **Point a domain at nothing yet — you'll add the DNS record mid-install.** You just need the domain name decided (e.g. `mail.yourdomain.com`).
 
-**What it can't do:** point your domain's DNS at the server. No script can do that without your DNS provider's API credentials. The installer detects the server's public IP, tells you the exact A record to add, and waits for it to propagate before requesting the SSL certificate — so just add that one record when prompted.
+2. **Get a fresh Ubuntu 22.04 or 24.04 server** (any provider) and SSH in as a user that can `sudo`, or as `root`.
 
-This script is meant to be run once, against a fresh server. To add a second login afterward, run `php artisan app:create-admin you@example.com` directly on the server instead of re-running the installer.
+3. **Clone the repo:**
+
+   ```bash
+   git clone https://github.com/Icarus0x0/icarus-mailer-lite.git
+   cd icarus-mailer-lite
+   ```
+
+4. **Run the installer**, replacing the domain and both emails with your own:
+
+   ```bash
+   sudo bash deploy/install.sh mail.yourdomain.com you@yourdomain.com owner@yourdomain.com
+   ```
+
+   - Arg 1: the domain this instance will be served on
+   - Arg 2: your email, for Let's Encrypt renewal notices
+   - Arg 3: the email you'll log in with (your dashboard login)
+
+5. **When the script pauses and shows an A record**, add it at your DNS provider:
+
+   ```
+   Type: A
+   Name: mail.yourdomain.com
+   Value: <the IP the script printed>
+   ```
+
+   Then press Enter in the terminal. The script polls DNS every 10 seconds for up to 5 minutes and requests the SSL certificate automatically once it resolves. If it times out before your DNS provider propagates, it tells you the exact `certbot` command to run yourself once it has.
+
+6. **Save the credentials printed at the end** — they are not stored anywhere and won't be shown again:
+
+   ```
+   URL:      https://mail.yourdomain.com
+   Login:    owner@yourdomain.com
+   Password: <randomly generated>
+   ```
+
+7. **Log in** at `https://mail.yourdomain.com/app` with that email and password.
+
+That's it — SMTP accounts, templates, recipient lists, and campaigns are all managed from the dashboard from here.
+
+### Notes
+
+- **DNS is the only manual step.** No script can point your domain at a server without your DNS provider's API credentials — everything else (packages, database, app, SSL, queue worker) is fully automated.
+- **This script is meant to be run once**, against a fresh server. Re-running it is safe (it won't overwrite an existing `.env` or clobber your database password), but to add a *second* login, don't re-run the installer — instead run this directly on the server:
+
+  ```bash
+  cd /path/to/icarus-mailer-lite
+  php8.3 artisan app:create-admin someone-else@yourdomain.com
+  ```
+
+- **Queue worker:** campaigns send asynchronously through a Supervisor-managed worker (2 processes) named `icarus-lite-worker`.
+
+  ```bash
+  sudo supervisorctl status icarus-lite-worker:*     # check it's running
+  tail -f storage/logs/worker.log                    # view its logs
+  ```
+
+- **Updating an existing install:** pull the latest code, then rebuild and reload:
+
+  ```bash
+  git pull
+  composer install --no-dev --optimize-autoloader
+  (cd frontend && npm ci && npm run build)
+  php artisan migrate --force
+  php artisan config:cache && php artisan route:cache
+  sudo systemctl reload php8.3-fpm
+  sudo supervisorctl restart icarus-lite-worker:*
+  ```
 
 ## API quick start
 
