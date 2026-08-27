@@ -1,33 +1,14 @@
 # Icarus Mailer Lite
 
-A minimal, open-source cold email / campaign sending API — SMTP account management, templates, recipient lists, and campaign sending with basic round-robin SMTP rotation.
+A minimal, open-source cold email / campaign sending platform: a React login and dashboard on top of a Laravel API, with SMTP account management, templates, recipient lists, and campaigns with basic round-robin SMTP rotation.
 
-This is the free, stripped-down sibling of **Icarus Mailer Pro Enterprise**, which adds:
+Lite gets your emails out the door. It's free, it's open-source, and it's deliberately basic by design.
 
-- Adaptive SMTP selection (health scoring, reputation gating, hourly rate-limit-aware rotation)
-- Proxy-based sending-location masking
-- Automatic DKIM signing per sending domain
-- Deliverability testing: seed-account inbox placement checks, auto-pause/resume on spam-folder detection
-- Bulk email validation and catch-all/MX-based domain intelligence
-- Multi-provider sender-domain automation (Mailgun, SendGrid, Brevo, Mailjet, and more)
-- A full email sorter/segmentation pipeline and mailbox automation
-- A Telegram bot for remote campaign control
+### For real inbox placement at scale, there's [Icarus Mailer Advanced](https://icarus0x0.com/)
 
-**→ [Icarus Mailer Advanced](https://icarus0x0.com/)**
+Round-robin rotation is a coin flip once you're sending real volume. Advanced is the platform serious senders run instead: a sophisticated AI deliverability engine that scores, predicts, and rewrites every campaign before it sends, reputation-aware SMTP rotation that routes around bad accounts automatically, live inbox-placement testing, and full analytics, not guesswork. It's not a bigger version of Lite. It's a different category of tool, built for people whose inbox placement is revenue, not a side project.
 
-## What's included
-
-- A login page and dashboard (React) — SMTP servers, templates, recipient lists, campaigns
-- SMTP account CRUD + live test-send
-- Email templates
-- Recipient lists (paste emails or JSON)
-- Campaigns: create, launch, pause, resume
-- Simple round-robin rotation across your active SMTP accounts
-- Token-based API auth (Laravel Sanctum) — the dashboard is just a client of the same `/api/*` endpoints documented below
-
-## What's intentionally left out
-
-Everything listed above under Pro Enterprise. This is a deliberately "lite" build — see Icarus Mailer Pro Enterprise for production-scale sending infrastructure.
+**→ [See what Icarus Mailer Advanced can do](https://icarus0x0.com/)**
 
 ## Requirements
 
