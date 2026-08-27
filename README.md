@@ -17,12 +17,13 @@ This is the free, stripped-down sibling of **Icarus Mailer Pro Enterprise**, whi
 
 ## What's included
 
+- A login page and dashboard (React) — SMTP servers, templates, recipient lists, campaigns
 - SMTP account CRUD + live test-send
 - Email templates
 - Recipient lists (paste emails or JSON)
 - Campaigns: create, launch, pause, resume
 - Simple round-robin rotation across your active SMTP accounts
-- Token-based API auth (Laravel Sanctum)
+- Token-based API auth (Laravel Sanctum) — the dashboard is just a client of the same `/api/*` endpoints documented below
 
 ## What's intentionally left out
 
@@ -32,6 +33,7 @@ Everything listed above under Pro Enterprise. This is a deliberately "lite" buil
 
 - PHP 8.2+
 - Composer
+- Node.js 18+ (only needed to build the dashboard — not required at runtime)
 
 No external database server is required — this ships configured for SQLite out of the box.
 
@@ -43,14 +45,31 @@ cp .env.example .env
 php artisan key:generate
 touch database/database.sqlite
 php artisan migrate
+php artisan app:create-admin you@example.com   # prints a generated password once
+```
+
+Build the dashboard (one-time, or whenever you change `frontend/`):
+
+```bash
+cd frontend
+npm install
+npm run build   # outputs into ../public/app — served at /app
+cd ..
+```
+
+Then run the app:
+
+```bash
 php artisan serve
 ```
 
-In a separate terminal, run a queue worker (campaigns send asynchronously):
+Visit `http://localhost:8000/app` and log in with the email/password `app:create-admin` printed. In a separate terminal, run a queue worker (campaigns send asynchronously):
 
 ```bash
 php artisan queue:work
 ```
+
+For frontend development with hot reload instead of a static build, run `npm run dev` inside `frontend/` (proxies `/api` to `php artisan serve` on port 8000 — see `frontend/vite.config.ts`).
 
 ## Deploying to a fresh Ubuntu VPS
 

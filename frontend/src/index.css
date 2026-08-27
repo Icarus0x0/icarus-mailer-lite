@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+@theme {
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Consolas', monospace;
+
+  --color-primary-50: #fff1f1;
+  --color-primary-100: #ffe1e1;
+  --color-primary-200: #ffc7c7;
+  --color-primary-300: #ffa0a0;
+  --color-primary-400: #ff6b6b;
+  --color-primary-500: #ff3838;
+  --color-primary-600: #ed1515;
+  --color-primary-700: #c80d0d;
+  --color-primary-800: #a50f0f;
+  --color-primary-900: #881414;
+
+  --color-dark-50: #f8f9fa;
+  --color-dark-100: #e9ecef;
+  --color-dark-200: #dee2e6;
+  --color-dark-300: #ced4da;
+  --color-dark-400: #adb5bd;
+  --color-dark-500: #6c757d;
+  --color-dark-600: #495057;
+  --color-dark-700: #343a40;
+  --color-dark-800: #212529;
+  --color-dark-900: #0a0c0d;
+}
+
+:root {
+  font-family: 'JetBrains Mono', 'Inter', 'Consolas', monospace;
+  line-height: 1.6;
+  color-scheme: light;
+}
+
+body {
+  @apply bg-gray-50 text-dark-900 min-h-screen m-0;
+  min-width: 320px;
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #e9ecef;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #ff3838, #ed1515);
+  border-radius: 8px;
+}
+
+::selection {
+  background-color: #ff3838;
+  color: white;
+}

@@ -94,6 +94,12 @@ if ! command -v composer >/dev/null 2>&1; then
     curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer >/dev/null
 fi
 
+if ! command -v node >/dev/null 2>&1; then
+    echo "==> Installing Node.js"
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - >/dev/null 2>&1
+    apt-get install -y -qq nodejs >/dev/null
+fi
+
 # ── 2. Database ──────────────────────────────────────────────────────────
 echo "==> Creating database and user"
 systemctl enable --now mariadb >/dev/null 2>&1 || service mariadb start
@@ -116,6 +122,9 @@ mysql -e "FLUSH PRIVILEGES;"
 echo "==> Installing PHP dependencies"
 cd "$APP_PATH"
 composer install --no-dev --optimize-autoloader --no-interaction -q
+
+echo "==> Building the frontend (login page + dashboard)"
+(cd "$APP_PATH/frontend" && npm ci --silent && npm run build --silent)
 
 if [[ ! -f "$APP_PATH/.env" ]]; then
     cp "$APP_PATH/.env.example" "$APP_PATH/.env"
