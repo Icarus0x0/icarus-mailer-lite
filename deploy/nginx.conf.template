@@ -4,7 +4,13 @@ server {
     server_name __DOMAIN__;
 
     root __APP_PATH__/public;
-    index index.php;
+    # index.html matters here, not just index.php: public/app/ (the built
+    # React SPA) is a real directory, so a bare "/app" request 301s to
+    # "/app/" and nginx then looks for a directory index INSIDE it before
+    # ever reaching Laravel's router. Without index.html listed, nginx
+    # can't find one there (there's no index.php in that directory) and
+    # returns a bare 403 instead of serving the SPA.
+    index index.php index.html;
 
     client_max_body_size 20M;
 

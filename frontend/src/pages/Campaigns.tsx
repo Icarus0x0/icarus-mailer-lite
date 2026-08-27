@@ -45,6 +45,17 @@ export default function Campaigns() {
 
   useEffect(fetchAll, []);
 
+  useEffect(() => {
+    const hasActive = campaigns.some((c) => c.status === 'sending' || c.status === 'queued');
+    if (!hasActive) return;
+    const interval = setInterval(() => {
+      Promise.all([campaignApi.list()])
+        .then(([c]) => setCampaigns(c.data))
+        .catch(() => {});
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [campaigns]);
+
   const openForm = () => {
     setFormData({ name: '', subject: '', template_id: '', recipient_list_id: '' });
     setShowForm(true);
