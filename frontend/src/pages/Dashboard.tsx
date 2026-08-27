@@ -37,24 +37,25 @@ export default function Dashboard() {
 
   const proFeatureGroups: { category: string; icon: string; items: string[] }[] = [
     {
+      category: 'AI-Driven Inbox Placement',
+      icon: 'ri-magic-fill',
+      items: [
+        'A sophisticated AI deliverability engine scores, predicts, and rewrites every campaign before it sends',
+        'Underperforming content is automatically detected and rewritten until it clears spam filters',
+        'A continuous, self-tuning feedback loop learns from real inbox results and adjusts your sending behavior in real time',
+        'Built to keep you out of spam, not just to send',
+      ],
+    },
+    {
       category: 'Deliverability',
       icon: 'ri-shield-check-fill',
       items: [
-        'Intelligent SMTP rotation that sends through your best-performing accounts first — not blind round-robin',
+        'Intelligent SMTP rotation that sends through your best-performing accounts first, not blind round-robin',
         'Automatic DKIM signing and DNS setup for every sending domain',
         'Real inbox-placement testing that catches spam-folder problems before your recipients do',
         'Automated bounce and suppression handling to keep your sender reputation clean',
         'Built-in link and content screening to keep your campaigns off blacklists',
         'Bulk list validation to strip risky and undeliverable addresses before you send',
-      ],
-    },
-    {
-      category: 'AI-Powered Inbox Placement',
-      icon: 'ri-magic-fill',
-      items: [
-        'Sophisticated AI models score every campaign for inbox placement before it ever leaves your account',
-        'Underperforming content is automatically rewritten to clear spam filters',
-        'A continuous feedback loop tests and tunes your sending behavior in real time — engineered for the highest inbox placement rates in the category',
       ],
     },
     {
@@ -71,7 +72,7 @@ export default function Dashboard() {
       icon: 'ri-plug-fill',
       items: [
         'Proxy-based sending-location masking',
-        'Connect Mailgun, SendGrid, Brevo, Mailjet, and more — all rotated automatically',
+        'Connect Mailgun, SendGrid, Brevo, Mailjet, and more, all rotated automatically',
         'Inbox monitoring across Gmail and Microsoft accounts',
         'A Telegram bot for remote campaign control from your phone',
       ],
@@ -143,7 +144,7 @@ export default function Dashboard() {
           </h2>
           <p className="text-dark-600 text-xs font-mono mt-1.5 max-w-3xl">
             Round-robin SMTP rotation is a coin flip on deliverability at scale. Icarus Mailer Advanced replaces it
-            with live reputation scoring, AI-driven content and DNS automation, and full analytics — the same
+            with a sophisticated AI deliverability engine, live reputation scoring, and full analytics: the same
             infrastructure serious senders rely on to actually land in the inbox, not the spam folder.
           </p>
         </div>
