@@ -22,6 +22,30 @@
 
 set -euo pipefail
 
+VERSION="1.0.0"
+
+print_banner() {
+    local script_dir
+    script_dir="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+    local banner_file="${script_dir}/assets/banner.ansi"
+    local bold='\033[1m'
+    local reset='\033[0m'
+
+    if [[ -f "$banner_file" ]]; then
+        cat "$banner_file"
+    fi
+
+    printf "%b" "${bold}"
+    cat <<EOF
+
+              ICARUS MAILER LITE  ·  v${VERSION}
+                     by Icarus Group
+EOF
+    printf "%b\n" "${reset}"
+}
+
+print_banner
+
 # ── Args ─────────────────────────────────────────────────────────────────
 DOMAIN="${1:-}"
 LETSENCRYPT_EMAIL="${2:-}"
@@ -234,7 +258,7 @@ fi
 # ── Summary ───────────────────────────────────────────────────────────────
 echo
 echo "================================================================"
-echo " Icarus Mailer Lite is deployed."
+echo " Icarus Mailer Lite v${VERSION} is deployed."
 echo "================================================================"
 echo " URL:      https://${DOMAIN}"
 if [[ -n "$ADMIN_LINE" ]]; then

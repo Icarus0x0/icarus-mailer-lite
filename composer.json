@@ -1,10 +1,17 @@
 {
     "$schema": "https://getcomposer.org/schema.json",
-    "name": "laravel/laravel",
+    "name": "icarus-group/icarus-mailer-lite",
     "type": "project",
-    "description": "The skeleton application for the Laravel framework.",
-    "keywords": ["laravel", "framework"],
+    "description": "Icarus Mailer Lite — a minimal, open-source cold email / campaign sending API.",
+    "version": "1.0.0",
+    "keywords": ["laravel", "email", "smtp", "campaigns"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Icarus Group",
+            "homepage": "https://icarus0x0.com/"
+        }
+    ],
     "require": {
         "php": "^8.3",
         "laravel/framework": "^13.17",
