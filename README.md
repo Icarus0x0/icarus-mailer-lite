@@ -13,7 +13,7 @@ This is the free, stripped-down sibling of **Icarus Mailer Pro Enterprise**, whi
 - A full email sorter/segmentation pipeline and mailbox automation
 - A Telegram bot for remote campaign control
 
-**→ [Pro Enterprise site — link coming soon]**
+**→ [Icarus Mailer Advanced](https://icarus0x0.com/)**
 
 ## What's included
 

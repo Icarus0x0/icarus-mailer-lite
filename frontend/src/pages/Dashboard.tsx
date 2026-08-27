@@ -35,6 +35,17 @@ export default function Dashboard() {
     completed: 'bg-green-100 text-green-700',
   };
 
+  const proFeatures = [
+    'Adaptive SMTP selection (health scoring, reputation gating, hourly rate-limit-aware rotation)',
+    'Proxy-based sending-location masking',
+    'Automatic DKIM signing per sending domain',
+    'Deliverability testing: seed-account inbox placement checks, auto-pause/resume on spam-folder detection',
+    'Bulk email validation and catch-all/MX-based domain intelligence',
+    'Multi-provider sender-domain automation (Mailgun, SendGrid, Brevo, Mailjet, and more)',
+    'A full email sorter/segmentation pipeline and mailbox automation',
+    'A Telegram bot for remote campaign control',
+  ];
+
   return (
     <div className="space-y-6">
       <div>
@@ -89,6 +100,37 @@ export default function Dashboard() {
               </div>
             ))
           )}
+        </div>
+      </div>
+
+      <div className="bg-white rounded-lg border-2 border-primary-200 overflow-hidden">
+        <div className="px-6 py-4 border-b-2 border-dark-200 bg-primary-50/30">
+          <h2 className="font-bold font-mono text-dark-900 flex items-center">
+            <i className="ri-rocket-2-fill text-primary-500 mr-2"></i>
+            Unlock More With Icarus Mailer Advanced
+          </h2>
+          <p className="text-dark-600 text-xs font-mono mt-1">
+            This Lite dashboard covers the essentials. The Advanced edition adds:
+          </p>
+        </div>
+        <div className="px-6 py-5">
+          <ul className="grid sm:grid-cols-2 gap-x-6 gap-y-2.5">
+            {proFeatures.map((f) => (
+              <li key={f} className="flex items-start text-sm font-mono text-dark-700">
+                <i className="ri-lock-2-fill text-primary-500 mr-2 mt-0.5 shrink-0"></i>
+                <span>{f}</span>
+              </li>
+            ))}
+          </ul>
+          <a
+            href="https://icarus0x0.com/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="mt-5 inline-flex items-center space-x-2 px-5 py-2.5 bg-primary-500 text-white rounded-lg hover:bg-primary-600 hover:shadow-glow-red transition-all font-mono font-bold text-sm"
+          >
+            <span>GET ICARUS MAILER ADVANCED</span>
+            <i className="ri-external-link-line"></i>
+          </a>
         </div>
       </div>
     </div>
